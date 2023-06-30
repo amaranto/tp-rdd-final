@@ -3,6 +3,7 @@ from config import logger
 from config import BOOKS_SOURCE,   BOOKS_DESTINATION
 import requests
 import json
+from shared.library import library
 posts = Blueprint("posts", __name__)
 
 @posts.route('/books/restaurar', methods=['POST'])
@@ -32,6 +33,10 @@ def restaurar_libreria():
         with open(BOOKS_DESTINATION, 'w') as f:
             json.dump(r.json(), f)
         logger.info(f"Se restauro la base de datos: {BOOKS_DESTINATION}")
+        with open(BOOKS_DESTINATION, 'r') as f:
+            books = json.load(f)
+            library.from_json(books)
+        logger.info(f"Se cargo la base de datos: {BOOKS_DESTINATION}")
         return make_response({"status": "restaurado"}, 200)
     
     except Exception as e:
