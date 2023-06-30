@@ -1,6 +1,6 @@
 from flask import Blueprint, request,make_response,jsonify
 from config import logger
-from shared.library import library
+from models.library import Library
 
 gets = Blueprint("gets", __name__)
 
@@ -62,17 +62,22 @@ def get_books():
     country = request.args.get('country', default=None, type=str)
     language = request.args.get('language', default=None, type=str)
 
+    library = Library()
     books = []
+
     if author is not None:
         books = library.get_books_by_author(author)
-    elif title is not None:
+        library.set_books(books)
+    if title is not None:
         books = library.get_books_by_title(title)
-    elif country is not None:
+        library.set_books(books)
+    if country is not None:
         books = library.get_books_by_country(country)
-    elif language is not None:
+        library.set_books(books)
+    if language is not None:
         books = library.get_books_by_language(language)
-    else:
-        books = library.get_books()
+        library.set_books(books)
+    books = library.get_all_books()
 
     try:
         return make_response([book.to_json() for book in books], 200)

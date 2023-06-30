@@ -16,7 +16,7 @@ class Library():
                 return book
         return None
     
-    def get_books(self) -> List[Book]:
+    def get_all_books(self) -> List[Book]:
         return self.books
     
     def get_books_by_language(self, language : str) -> List[Book]:
@@ -69,4 +69,6 @@ class Library():
     def save_library(self, path = BOOKS_DESTINATION ) -> None:
         with open(path, "w") as f:
             json.dump(self.to_json(), f)
-            
+    
+    def set_books(self, books: List[Book]):
+        self.books = books
