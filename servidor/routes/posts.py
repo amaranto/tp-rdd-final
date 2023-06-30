@@ -9,6 +9,8 @@ posts = Blueprint("posts", __name__)
 def restaurar_libreria():
     """Restaura la libreria a su estado original
     ---        
+    tags:
+      - books    
     responses:
       200:
         description: Base de datos restaurada.

@@ -9,6 +9,8 @@ puts = Blueprint("puts", __name__)
 def agrega_book():
     """Agrega un libro a la libreria
     ---
+    tags:
+      - books    
     parameters:
       - in: body
         name: body

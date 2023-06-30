@@ -11,6 +11,8 @@ deletes = Blueprint("deletes", __name__)
 def delete_books():
     """Borra un libro por titulo o varios por autor. Uno de los parametros es obligatorio
     ---
+    tags:
+      - books    
     parameters:
       - in: body
         name: body
