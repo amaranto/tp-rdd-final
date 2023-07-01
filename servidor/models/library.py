@@ -59,6 +59,13 @@ class Library():
         for book in books:
             self.delete_book(book)
     
+    def delete_books(self, author : str, title : str) -> None:
+        books_author = self.get_books_by_author(author)
+        books_title = self.get_books_by_title(title)
+        for book in books_title:
+            if book in books_author:
+                self.delete_book(book)
+    
     def to_json(self) -> List[dict]:
         return [book.to_json() for book in self.books]
 

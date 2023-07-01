@@ -18,25 +18,43 @@ def agregar_libro():
         Ingrese el titulo: ''')
     year = input('''
         Ingrese el año: ''')
-
+    data = {
+             "author": author,
+             "country": country,
+             "imageLink": imageLink,
+             "language": language,
+             "link": link,
+             "pages": int(pages),
+             "title": title,
+             "year": int(year)
+            }
+    
     try:
-        response = requests.put("http://localhost:5000/books", json={"author": author, "country": country, "imageLink": imageLink, "language": language, "link": link, "pages": int(pages), "title": title, "year": int(year)})
+        response = requests.put("http://localhost:5000/books", json=data)
         return response.json()
     except Exception as e:
         
         return {"error": str(e)}
     
-def eliminar_libro(param, valor):
+def eliminar_libro(author, title):
     try:
-        response = requests.delete("http://localhost:5000/books", json={param: valor})
+        response = requests.delete("http://localhost:5000/books", json={'author': author, 'title': title})
         return response.json()
     except Exception as e:
         
         return {"error": str(e)}
     
-def buscar_libro(param=None, valor=None):
+def buscar_libro(author: None, title: None, languaje: None, country: None):
     try:
-        data = {} if param is None or valor is None else {param: valor}
+        
+        if author is None and title is None and languaje is None and country is None:
+            data = {}
+        data = {
+            'author' : author,
+            'title' : title,
+            'language' : languaje,
+            'country' : country
+        }
         response = requests.get("http://localhost:5000/books", params=data)
         return response.json()
     except Exception as e:
@@ -46,7 +64,7 @@ def buscar_libro(param=None, valor=None):
 def restaurar_libro():
     try:
         response = requests.post("http://localhost:5000/books/restaurar", json={})
-        return response.json()
+        return response.json()['status']
     except Exception as e:
         
         return {"error": str(e)}
@@ -74,13 +92,17 @@ def main():
                 ''')
 
         elif opcion == '2':
-            param = input('''
-            - Ingrese el parametro: '''
+            author = input('''
+            - Ingrese el autor: '''
+            )    
+            title = input('''
+            - Ingrese el titulo: '''
             )
-            valor = input('''
-            - Ingrese el valor: '''
-            )
-            response = eliminar_libro(param, valor)
+
+            if author == '': author = None
+            if title == '': title = None
+
+            response = eliminar_libro(author, title)
             if "status" not in response or response["status"] != "deleted":
                 print(f''' 
                 No se pudo eliminar el libro ! {response}
@@ -91,18 +113,28 @@ def main():
                 ''')
 
         elif opcion == '3':
-            param = input('''
-            - Ingrese el parametro (Enter para ver todos): '''
+            author = input('''
+            - Ingrese el autor: '''
             )
 
-            valor = None
-            if param != '':
-                valor = input(
-            f'''
-            - Ingrese el valor del filtro {param}: '''
+            title = input('''
+            - Ingrese el titulo: '''
             )
 
-            response = buscar_libro(param, valor)
+            languaje = input('''
+            - Ingrese el idioma: '''
+            )
+
+            country = input('''
+            - Ingrese el país: '''
+            )
+
+            if author == '': author = None
+            if title == '': title = None
+            if country == '': country = None
+            if languaje == '': languaje = None
+
+            response = buscar_libro(author, title, languaje, country)
             if len(response) == 0:
                 print('''
                 No se encontraron libros !

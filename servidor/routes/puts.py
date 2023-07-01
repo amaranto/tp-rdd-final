@@ -78,7 +78,7 @@ def agrega_book():
         pages =  body["pages"] if "pages" in body else None
         year = body["year"] if "year" in body else None
 
-        book = Book(author, title, country, imageLink, language, link, pages, year)
+        book = Book(author, country, imageLink, language, link, pages, title, year)
 
         print(book.to_json())        
         if author is None or title is None or country is None or imageLink is None or link is None or language is None or pages is None or year is None:

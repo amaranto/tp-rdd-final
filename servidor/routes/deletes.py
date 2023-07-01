@@ -25,11 +25,11 @@ def delete_books():
             author:
               type: string
               description: Autor del libro
-              default: Jane Austen
+              default: None
             title:
               type: string
               description: Titulo del libro
-              default: Pride and Prejudice   
+              default: None  
     definitions:
       StatusResponse:
         type: object
@@ -57,12 +57,15 @@ def delete_books():
         author = body["author"] if "author" in body else None
         title = body["title"] if "title" in body else None
 
-        if author is not None:
+        if author is not None and title is not None:
+            logger.info(f"Borrando libros por autor y titulo: {author}, {title}")
+            library.delete_books_by_author(author)
+        elif author is not None:
             logger.info(f"Borrando libros por autor: {author}")
-            books = library.delete_books_by_author(author)
+            library.delete_books_by_author(author)
         elif title is not None:
             logger.info(f"Borrando libro por titulo: {title}")
-            books = library.delete_book_by_title(title)
+            library.delete_book_by_title(title)
         else:
             raise Exception("No se especificó un filtro válido: [author|title]")
         
